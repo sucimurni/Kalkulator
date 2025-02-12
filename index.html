@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Teka-Teki</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .calculator {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            text-align: center;
+        }
+        .calculator h1 {
+            font-size: 24px;
+            color: #4CAF50;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            text-align: right;
+            background-color: #f9f9f9;
+        }
+        button {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+        .mystery {
+            color: #f44336;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .question {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <h1>Kalkulator Teka-Teki</h1>
+        <input type="text" id="display" disabled>
+        <div class="row">
+            <button onclick="addToDisplay('1')">1</button>
+            <button onclick="addToDisplay('2')">2</button>
+            <button onclick="addToDisplay('3')">3</button>
+            <button onclick="addToDisplay('+')">+</button>
+        </div>
+        <div class="row">
+            <button onclick="addToDisplay('4')">4</button>
+            <button onclick="addToDisplay('5')">5</button>
+            <button onclick="addToDisplay('6')">6</button>
+            <button onclick="addToDisplay('-')">-</button>
+        </div>
+        <div class="row">
+            <button onclick="addToDisplay('7')">7</button>
+            <button onclick="addToDisplay('8')">8</button>
+            <button onclick="addToDisplay('9')">9</button>
+            <button onclick="addToDisplay('*')">*</button>
+        </div>
+        <div class="row">
+            <button onclick="addToDisplay('0')">0</button>
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="triggerTekaTeki()">=</button>
+            <button onclick="addToDisplay('/')">/</button>
+        </div>
+        <p id="mystery" class="mystery"></p>
+        <p id="question" class="question"></p>
+        <input type="text" id="answer" placeholder="Jawab teka-teki..." disabled>
+        <button onclick="checkAnswer()">Kirim Jawaban</button>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let mysteryText = document.getElementById('mystery');
+        let questionText = document.getElementById('question');
+        let answerInput = document.getElementById('answer');
+
+        let currentAnswer = "";
+
+        function addToDisplay(value) {
+            display.value += value;
+            mysteryText.innerHTML = ""; // Reset the mystery text when user types
+        }
+
+        function clearDisplay() {
+            display.value = "";
+            mysteryText.innerHTML = "";
+            questionText.innerHTML = "";
+            answerInput.value = "";
+            answerInput.disabled = true;
+        }
+
+        function triggerTekaTeki() {
+            try {
+                let result = eval(display.value);
+                display.value = result;
+                showQuestion(result);
+            } catch (e) {
+                display.value = "Error!";
+                mysteryText.innerHTML = "Ups! Ada yang salah!";
+            }
+        }
+
+        function showQuestion(result) {
+            const tekaTekis = [
+                {
+                    question: "Berapa 5 + 5?",
+                    answer: "10"
+                },
+                {
+                    question: "Apa yang lebih besar dari 3, tapi lebih kecil dari 7?",
+                    answer: "5"
+                },
+                {
+                    question: "Jika kamu memiliki 10 apel dan kamu makan 3, berapa banyak yang tersisa?",
+                    answer: "7"
+                },
+                {
+                    question: "Apa yang naik tapi tidak pernah turun?",
+                    answer: "Usia"
+                }
+            ];
+
+            let randomTekaTeki = tekaTekis[Math.floor(Math.random() * tekaTekis.length)];
+            questionText.innerHTML = randomTekaTeki.question;
+            currentAnswer = randomTekaTeki.answer;
+
+            answerInput.disabled = false;
+        }
+
+        function checkAnswer() {
+            if (answerInput.value.toLowerCase() === currentAnswer.toLowerCase()) {
+                mysteryText.innerHTML = "Selamat! Jawabanmu benar!";
+            } else {
+                mysteryText.innerHTML = "Coba lagi! Jawabanmu salah.";
+            }
+            answerInput.value = "";
+            answerInput.disabled = true;
+        }
+    </script>
+
+</body>
+</html>
